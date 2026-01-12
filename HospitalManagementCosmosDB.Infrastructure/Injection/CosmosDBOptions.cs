@@ -4,7 +4,7 @@ using System.Text;
 
 namespace HospitalManagementCosmosDB.Infrastructure.Injection
 {
-    public class CosmosDBOptions
+    public class CosmosDbOptions
     {
         public string AccountEndpoint { get; set; } = null!;
         public string AccountKey { get; set; } = null!;

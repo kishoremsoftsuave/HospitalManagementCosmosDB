@@ -3,12 +3,13 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.Text;
 using Microsoft.Azure.Cosmos;
-using Microsoft.Extensions.Configuration;
+using HospitalManagementCosmosDB.Application.Interfaces;
+using HospitalManagementCosmosDB.Infrastructure.Repository;
+using HospitalManagementCosmosDB.Application.Services;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Options;
-using HospitalManagementCosmosDB.Infrastructure.Data;
-using HospitalManagementCosmosDB.Infrastructure.Injection;
-using HospitalManagementCosmosDB.Infrastructure.Repositories;
+
 namespace HospitalManagementCosmosDB.Infrastructure.Injection
 {
     public class DependencyInjection
@@ -56,8 +57,8 @@ namespace HospitalManagementCosmosDB.Infrastructure.Injection
                 return client.GetContainer(opt.DatabaseId, opt.ContainerId);
             });
 
-            services.AddSingleton<CosmosIPatientRepository, CosmosPatientRepository>();
-            services.AddSingleton<CosmosIPatientService, CosmosPatientService>();
+            services.AddSingleton<IPatientRepository, PatientRepository>();
+            services.AddSingleton<IPatientService, PatientService>();
 
             return services;
         }
