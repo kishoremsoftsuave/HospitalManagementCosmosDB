@@ -9,6 +9,11 @@ namespace HospitalManagementCosmosDB.Infrastructure.Injection
         public string AccountEndpoint { get; set; } = null!;
         public string AccountKey { get; set; } = null!;
         public string DatabaseId { get; set; } = null!;
+        public List<CosmosContainerOptionss> Containers { get; set; } = new();
+
+    }
+    public class CosmosContainerOptionss
+    {
         public string ContainerId { get; set; } = null!;
         public string PartitionKeyPath { get; set; } = "/id";
     }

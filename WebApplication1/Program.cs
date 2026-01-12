@@ -3,6 +3,7 @@ using HospitalManagementCosmosDB.Infrastructure.Injection;
 using Microsoft.Azure.Cosmos;
 using Microsoft.Extensions.Options;
 using HospitalManagementCosmosDB.Infrastructure.Data;
+using System.Security.Cryptography.X509Certificates;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -35,15 +36,14 @@ using (var scope = app.Services.CreateScope())
 
     // Log info
     Console.WriteLine($"DB = {cosmosOptions.DatabaseId}");
-    Console.WriteLine($"Container = {cosmosOptions.ContainerId}");
 
     // Initialize database and container
-    await CosmosInitializer.InitializeAsync(
-        cosmosClient,
-        cosmosOptions.DatabaseId,
-        cosmosOptions.ContainerId,
-        cosmosOptions.PartitionKeyPath
-    );
+    foreach (var c in cosmosOptions.Containers)
+    {
+        Console.WriteLine($"Container = {c.ContainerId}, PK = {c.PartitionKeyPath}");
+    }
+
+    await CosmosInitializer.InitializeAsync(cosmosClient, cosmosOptions);
 }
 app.UseHttpsRedirection();
 

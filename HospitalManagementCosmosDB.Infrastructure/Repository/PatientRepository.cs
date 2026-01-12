@@ -1,5 +1,6 @@
 ﻿using HospitalManagementCosmosDB.Application.Interfaces;
 using HospitalManagementCosmosDB.Domain.Entities;
+using HospitalManagementCosmosDB.Infrastructure.Injection;
 using Microsoft.Azure.Cosmos;
 using System;
 using System.Collections.Generic;
@@ -12,9 +13,14 @@ namespace HospitalManagementCosmosDB.Infrastructure.Repository
     {
         private readonly Container _container;
 
-        public PatientRepository(Container container)
+        //public PatientRepository(Container container)
+        //{
+        //    _container = container;
+        //}
+
+        public PatientRepository(CosmosContainerFactory factory)
         {
-            _container = container;
+            _container = factory.GetContainer("Patients");
         }
 
         // GET ALL

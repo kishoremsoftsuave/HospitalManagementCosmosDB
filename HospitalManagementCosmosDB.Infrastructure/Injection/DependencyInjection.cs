@@ -45,13 +45,16 @@ namespace HospitalManagementCosmosDB.Infrastructure.Injection
 
 
 
-            services.AddSingleton(sp =>
-            {
-                var opt = sp.GetRequiredService<IOptions<CosmosDbOptions>>().Value;
-                var client = sp.GetRequiredService<CosmosClient>();
+            //services.AddSingleton(sp =>
+            //{
+            //    var opt = sp.GetRequiredService<IOptions<CosmosDbOptions>>().Value;
+            //    var client = sp.GetRequiredService<CosmosClient>();
 
-                return client.GetContainer(opt.DatabaseId, opt.ContainerId);
-            });
+            //    return client.GetContainer(opt.DatabaseId, opt.ContainerId);
+            //});
+
+            services.AddSingleton<CosmosContainerFactory>();
+
 
             services.AddSingleton<IPatientRepository, PatientRepository>();
             services.AddSingleton<IPatientService, PatientService>();
