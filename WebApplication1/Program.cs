@@ -27,24 +27,23 @@ if (app.Environment.IsDevelopment())
 
 using (var scope = app.Services.CreateScope())
 {
-    var opt = scope.ServiceProvider
-                   .GetRequiredService<IOptions<CosmosDbOptions>>().Value;
+    var services = scope.ServiceProvider;
 
-    Console.WriteLine("DB = " + opt.DatabaseId);
-    Console.WriteLine("Container = " + opt.ContainerId);
-}
+    // Get Cosmos options and client once
+    var cosmosOptions = services.GetRequiredService<IOptions<CosmosDbOptions>>().Value;
+    var cosmosClient = services.GetRequiredService<CosmosClient>();
 
+    // Log info
+    Console.WriteLine($"DB = {cosmosOptions.DatabaseId}");
+    Console.WriteLine($"Container = {cosmosOptions.ContainerId}");
 
-using (var scope = app.Services.CreateScope())
-{
-    var client = scope.ServiceProvider.GetRequiredService<CosmosClient>();
-    var opt = scope.ServiceProvider.GetRequiredService<IOptions<CosmosDbOptions>>().Value;
-
+    // Initialize database and container
     await CosmosInitializer.InitializeAsync(
-        client,
-        opt.DatabaseId,
-        opt.ContainerId,
-        opt.PartitionKeyPath);
+        cosmosClient,
+        cosmosOptions.DatabaseId,
+        cosmosOptions.ContainerId,
+        cosmosOptions.PartitionKeyPath
+    );
 }
 app.UseHttpsRedirection();
 

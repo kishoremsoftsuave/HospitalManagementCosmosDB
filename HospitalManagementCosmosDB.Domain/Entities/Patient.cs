@@ -7,7 +7,6 @@ namespace HospitalManagementCosmosDB.Domain.Entities
 {
     public class Patient
     {
-        [JsonPropertyName("id")]
         //public string Id { get; set; } = Guid.NewGuid().ToString("N");// remove hyphens for Cosmos DB id
         public string Id { get; set; } = Guid.NewGuid().ToString();
         public string Name { get; set; } = string.Empty;

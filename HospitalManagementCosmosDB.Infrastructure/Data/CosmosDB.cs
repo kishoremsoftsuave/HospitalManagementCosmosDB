@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using Microsoft.Azure.Cosmos;
-using System.Text;
+﻿using Microsoft.Azure.Cosmos;
 
 namespace HospitalManagementCosmosDB.Infrastructure.Data
 {

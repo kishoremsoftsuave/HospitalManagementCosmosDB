@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.Text;
-using Microsoft.Azure.Cosmos;
+﻿using Microsoft.Azure.Cosmos;
 using HospitalManagementCosmosDB.Application.Interfaces;
 using HospitalManagementCosmosDB.Infrastructure.Repository;
 using HospitalManagementCosmosDB.Application.Services;
@@ -12,7 +8,7 @@ using Microsoft.Extensions.Options;
 
 namespace HospitalManagementCosmosDB.Infrastructure.Injection
 {
-    public class DependencyInjection
+    public static class DependencyInjection
     {
         public static IServiceCollection AddInfrastructure(this IServiceCollection services, IConfiguration configuration)
         {
