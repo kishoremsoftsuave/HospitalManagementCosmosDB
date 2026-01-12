@@ -10,9 +10,9 @@ namespace HospitalManagementCosmosDB.Application.AutoMapping
   {
         public AutoMap()
         {
-            CreateMap<CreatePatientDTO, Patient>();
-            CreateMap<UpdatePatientDTO, Patient>();
-            CreateMap<Patient, PatientDTO>();
+            CreateMap<CreatePatientDTO, Patient>().ReverseMap();
+            CreateMap<UpdatePatientDTO, Patient>().ReverseMap();
+            CreateMap<Patient, PatientDTO>().ReverseMap();
         }
   }
 }
