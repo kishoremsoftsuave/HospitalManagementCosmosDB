@@ -22,14 +22,10 @@ namespace HospitalManagementCosmosDB.API.Controllers
             return Ok(patients);
         }
 
-        [HttpGet("{id}")]
+        [HttpGet]
         public async Task<IActionResult> GetById(string id)
         {
             var patient = await _service.GetById(id);
-            if (patient == null)
-            {
-                return NotFound();
-            }
             return Ok(patient);
         }
 
@@ -37,24 +33,20 @@ namespace HospitalManagementCosmosDB.API.Controllers
         public async Task<IActionResult> Create([FromBody] CreatePatientDTO dto)
         {
             var createdPatient = await _service.Create(dto);
-            return CreatedAtAction(nameof(GetById), new { id = createdPatient.Id }, createdPatient);
+            return CreatedAtAction(nameof(GetById), createdPatient);
         }
 
-        [HttpPut("{id}")]
-        public async Task<IActionResult> Update(string id, [FromBody] UpdatePatientDTO dto)
+        [HttpPut]
+        public async Task<IActionResult> UpdateById(string id, [FromBody] UpdatePatientDTO dto)
         {
-            if (id != dto.Id)
-            {
-                return BadRequest("ID mismatch");
-            }
-            var updatedPatient = await _service.UpdateById(dto);
-            return Ok(updatedPatient);
+            var updatedPatient = await _service.UpdateById(id, dto);
+            return Ok("Patient Details is Updated");
         }
         [HttpDelete("{id}")]
-        public async Task<IActionResult> Delete(string id)
+        public async Task<IActionResult> DeleteById(string id)
         {
             await _service.Delete(id);
-            return NoContent();
+            return Ok("Patient Details is Deleted");
         }
     }
 }

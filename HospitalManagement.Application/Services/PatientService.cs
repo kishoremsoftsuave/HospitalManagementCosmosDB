@@ -28,21 +28,25 @@ namespace HospitalManagementCosmosDB.Application.Services
         public async Task<PatientDTO?> GetById(string id)
         {
             var patient = await _repo.GetById(id);
-            if (patient == null) return null;
+            if (patient == null) throw new Exception("Patient Not Found");
 
             return _mapper.Map<PatientDTO>(patient);
         }
         public async Task<PatientDTO> Create(CreatePatientDTO dto)
         {
             var patient = _mapper.Map<Patient>(dto);
+
+            Console.WriteLine($"Creating patient with Id={patient.Id}");
             var created = await _repo.Create(patient);
 
             return _mapper.Map<PatientDTO>(created);
         }
 
-        public async Task<PatientDTO> UpdateById(UpdatePatientDTO dto)
+        public async Task<PatientDTO> UpdateById(string id,UpdatePatientDTO dto)
         {
-            var patient = _mapper.Map<Patient>(dto);
+            var existing = await _repo.GetById(id);
+            if (existing == null) throw new Exception("Patient Not Found");
+            var patient = _mapper.Map(dto,existing);
 
             var updated = await _repo.UpdateById(patient);
 
@@ -51,6 +55,8 @@ namespace HospitalManagementCosmosDB.Application.Services
 
         public async Task Delete(string id)
         {
+            var existing = await _repo.GetById(id);
+            if (existing == null) throw new Exception("Patient Not Found");
             await _repo.Delete(id);
         }
     }

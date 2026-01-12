@@ -10,7 +10,7 @@ namespace HospitalManagementCosmosDB.Application.Interfaces
         Task<List<PatientDTO>> GetAll();
         Task<PatientDTO?> GetById(string id);
         Task<PatientDTO> Create(CreatePatientDTO dto);
-        Task<PatientDTO> UpdateById(UpdatePatientDTO dto);
+        Task<PatientDTO> UpdateById(string id,UpdatePatientDTO dto);
         Task Delete(string id);
     }
 }

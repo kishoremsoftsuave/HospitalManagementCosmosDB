@@ -10,8 +10,7 @@ namespace HospitalManagementCosmosDB.Application.AutoMapping
   {
         public AutoMap()
         {
-            CreateMap<CreatePatientDTO, Patient>()
-                .ForMember(dest => dest.Id, opt => opt.MapFrom(_ => Guid.NewGuid().ToString()));
+            CreateMap<CreatePatientDTO, Patient>();
             CreateMap<UpdatePatientDTO, Patient>();
             CreateMap<Patient, PatientDTO>();
         }

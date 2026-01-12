@@ -59,7 +59,7 @@ namespace HospitalManagementCosmosDB.Infrastructure.Repository
         // UPDATE (UPSERT)
         public async Task<Patient> UpdateById(Patient patient)
         {
-            var response = await _container.UpsertItemAsync(patient, new PartitionKey(patient.Id));
+            var response = await _container.ReplaceItemAsync(patient, patient.Id, new PartitionKey(patient.Id));
 
             return response.Resource;
         }
