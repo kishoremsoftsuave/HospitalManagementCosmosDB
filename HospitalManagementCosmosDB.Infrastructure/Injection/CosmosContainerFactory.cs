@@ -13,7 +13,7 @@ namespace HospitalManagementCosmosDB.Infrastructure.Injection
 
         public CosmosContainerFactory(
             CosmosClient client,
-            IOptions<CosmosDbOptions> options)
+            IOptions<CosmosDbOptions> options)  
         {
             _client = client;
             _databaseId = options.Value.DatabaseId;
