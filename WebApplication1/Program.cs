@@ -1,21 +1,65 @@
+using HospitalManagementCosmosDB.API.Middlewares;
 using HospitalManagementCosmosDB.Application.AutoMapping;
 using HospitalManagementCosmosDB.Infrastructure.Injection;
 using Microsoft.Azure.Cosmos;
 using Microsoft.Extensions.Options;
+using Microsoft.OpenApi.Models;
 
 
 var builder = WebApplication.CreateBuilder(args);
 
 
 builder.Services.AddControllers();
-builder.Services.AddOpenApi();
-builder.Services.AddSwaggerGen();
+//builder.Services.AddOpenApi();
+builder.Services.AddSwaggerGen(c =>
+{
+    c.SwaggerDoc("v1", new OpenApiInfo
+    {
+        Title = "Hospital Management API",
+        Version = "v1"
+    });
+
+    c.AddSecurityDefinition("Idempotency-Key", new OpenApiSecurityScheme
+    {
+        Name = "Idempotency-Key",
+        Type = SecuritySchemeType.ApiKey,
+        In = ParameterLocation.Header,
+        Description = "Unique key to make POST/PUT requests idempotent"
+    });
+
+    c.AddSecurityRequirement(new OpenApiSecurityRequirement
+    {
+        {
+            new OpenApiSecurityScheme
+            {
+                Reference = new OpenApiReference
+                {
+                    Type = ReferenceType.SecurityScheme,
+                    Id = "Idempotency-Key"
+                }
+            },
+            Array.Empty<string>()
+        }
+    });
+});
+
 
 // Infrastructure
 builder.Services.AddInfrastructure(builder.Configuration);
 
 // AutoMapper
 builder.Services.AddAutoMapper(typeof(AutoMap).Assembly);
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAll", policy =>
+    {
+        policy
+            .AllowAnyOrigin()
+            .AllowAnyMethod()
+            .AllowAnyHeader();
+    });
+});
+
 
 var app = builder.Build();
 if (app.Environment.IsDevelopment())
@@ -43,7 +87,12 @@ using (var scope = app.Services.CreateScope())
 
     await CosmosInitializer.InitializeAsync(cosmosClient, cosmosOptions);
 }
+
+app.UseCors("AllowAll");
+
 app.UseHttpsRedirection();
+
+app.UseMiddleware<IdempotencyMiddleware>();
 
 app.UseAuthorization();
 

@@ -43,55 +43,55 @@ namespace HospitalManagementCosmosDB.API.Controllers
 
         #region Previous Create Method
 
-        //[HttpPost]
-        //public async Task<IActionResult> Create([FromBody] CreatePatientDTO dto)
-        //{
-        //    var createdPatient = await _service.Create(dto);
-        //    return CreatedAtAction(nameof(GetById), createdPatient);
-        //}
+        [HttpPost]
+        public async Task<IActionResult> Create([FromBody] CreatePatientDTO dto)
+        {
+            var createdPatient = await _service.Create(dto);
+            return CreatedAtAction(nameof(GetById), createdPatient);
+        }
 
         #endregion
 
         #region Idempotent Create Method
 
-        [HttpPost]
-        public async Task<IActionResult> Create([FromBody] CreatePatientDTO dto,[FromServices] IdempotencyRepository repo)
-        {
-            if (!Request.Headers.TryGetValue("Idempotency-Key", out var key))
-            {
-                return BadRequest("Idempotency-Key header is required");
-            }
+        //[HttpPost]
+        //public async Task<IActionResult> Create([FromBody] CreatePatientDTO dto,[FromServices] IdempotencyRepository repo)
+        //{
+        //    if (!Request.Headers.TryGetValue("Idempotency-Key", out var key))
+        //    {
+        //        return BadRequest("Idempotency-Key header is required");
+        //    }
 
-            var requestHash = RequestHashHelper.ComputeHash(dto);
+        //    var requestHash = RequestHashHelper.ComputeHash(dto);
 
-            // 🔹 Read existing idempotency record
-            var existing = await repo.GetAsync(key!);
+        //    // 🔹 Read existing idempotency record
+        //    var existing = await repo.GetAsync(key!);
 
-            // ✅ THIS IS WHERE YOUR CHECK GOES
-            if (existing != null && existing.RequestHash != requestHash)
-            {
-                return Conflict("Idempotency-Key reuse with different request body");
-            }
+        //    // ✅ THIS IS WHERE YOUR CHECK GOES
+        //    if (existing != null && existing.RequestHash != requestHash)
+        //    {
+        //        return Conflict("Idempotency-Key reuse with different request body");
+        //    }
 
-            // 🔹 If same key + same body → return cached response
-            if (existing != null)
-            {
-                return Ok(JsonConvert.DeserializeObject(existing.ResponseJson));
-            }
+        //    // 🔹 If same key + same body → return cached response
+        //    if (existing != null)
+        //    {
+        //        return Ok(JsonConvert.DeserializeObject(existing.ResponseJson));
+        //    }
 
-            // 🔹 Create new resource
-            var result = await _service.Create(dto);
+        //    // 🔹 Create new resource
+        //    var result = await _service.Create(dto);
 
-            // 🔹 Save idempotency record
-            await repo.SaveAsync(new Idempotency
-            {
-                Id = key!,
-                RequestHash = requestHash,
-                ResponseJson = JsonConvert.SerializeObject(result)
-            });
+        //    // 🔹 Save idempotency record
+        //    await repo.SaveAsync(new Idempotency
+        //    {
+        //        Id = key!,
+        //        RequestHash = requestHash,
+        //        ResponseJson = JsonConvert.SerializeObject(result)
+        //    });
 
-            return CreatedAtAction(nameof(GetById), result);
-        }
+        //    return CreatedAtAction(nameof(GetById), result);
+        //}
 
         #endregion
 
