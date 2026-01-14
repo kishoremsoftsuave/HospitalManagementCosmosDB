@@ -58,6 +58,8 @@ namespace HospitalManagementCosmosDB.Infrastructure.Injection
 
             services.AddSingleton<IPatientRepository, PatientRepository>();
             services.AddSingleton<IPatientService, PatientService>();
+            services.AddSingleton<IdempotencyRepository>();
+
 
             return services;
         }

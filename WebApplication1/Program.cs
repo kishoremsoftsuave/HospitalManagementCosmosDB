@@ -2,8 +2,6 @@ using HospitalManagementCosmosDB.Application.AutoMapping;
 using HospitalManagementCosmosDB.Infrastructure.Injection;
 using Microsoft.Azure.Cosmos;
 using Microsoft.Extensions.Options;
-using HospitalManagementCosmosDB.Infrastructure.Data;
-using System.Security.Cryptography.X509Certificates;
 
 
 var builder = WebApplication.CreateBuilder(args);
